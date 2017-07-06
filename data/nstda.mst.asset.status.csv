@@ -1,0 +1,27 @@
+id,create_uid/id,create_date,write_uid/id,write_date,status_code,description
+__import__.nstda_mst_asset_status_1,,,,,1,ใช้งานปกติ
+__import__.nstda_mst_asset_status_2,,,,,2,(ยกเลิก) ของแถม
+__import__.nstda_mst_asset_status_3,,,,,3,(ยกเลิก) บริจาค
+__import__.nstda_mst_asset_status_4,,,,,4,(ยกเลิก) รับโอนมีมูลค่า
+__import__.nstda_mst_asset_status_5,,,,,5,รอจำหน่าย
+__import__.nstda_mst_asset_status_6,,,,,6,ชำรุด
+__import__.nstda_mst_asset_status_7,,,,,7,สูญหาย
+__import__.nstda_mst_asset_status_8,,,,,8,(ยกเลิก) ไม่ได้ใช้งาน
+__import__.nstda_mst_asset_status_9,,,,,9,(ยกเลิก) จำหน่ายไปแล้ว
+__import__.nstda_mst_asset_status_10,,,,,10,(ยกเลิก) สินทรัพย์จากส่วนกลาง
+__import__.nstda_mst_asset_status_11,,,,,11,AIT - สินทรัพย์ระหว่างทาง
+__import__.nstda_mst_asset_status_12,,,,,12,(ยกเลิก) AUC - อาคาร
+__import__.nstda_mst_asset_status_13,,,,,13,(ยกเลิก) AUC - ค่าควบคุมงาน
+__import__.nstda_mst_asset_status_14,,,,,14,(ยกเลิก) AUC - ค่าออกแบบอาคาร
+__import__.nstda_mst_asset_status_15,,,,,15,(ยกเลิก) AUC - ระหว่างติดตั้ง
+__import__.nstda_mst_asset_status_16,,,,,16,AUC - สินทรัพย์ระหว่างก่อสร้าง
+__import__.nstda_mst_asset_status_17,,,,,17,โอนเป็นครุภัณฑ์
+__import__.nstda_mst_asset_status_18,,,,,18,เลขครุภัณฑ์รอใช้งาน
+__import__.nstda_mst_asset_status_19,,,,,19,ยกเลิกเลขครุภัณฑ์
+__import__.nstda_mst_asset_status_20,,,,,20,จำหน่าย - ขาย
+__import__.nstda_mst_asset_status_21,,,,,21,จำหน่าย - แลกเปลี่ยน
+__import__.nstda_mst_asset_status_22,,,,,22,จำหน่าย - โอน
+__import__.nstda_mst_asset_status_23,,,,,23,จำหน่าย - แปรสภาพ/ทำลาย
+__import__.nstda_mst_asset_status_24,,,,,24,หมดอายุการใช้งาน
+__import__.nstda_mst_asset_status_25,,,,,25,ต้นแบบ
+__import__.nstda_mst_asset_status_26,,,,,26,ส่งมอบ

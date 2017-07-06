@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record forcecreate="1" id="seq_type_mst" model="ir.sequence.type">
+            <field name="name">nstda.mst</field>
+            <field name="code">nstda.mst</field>
+        </record>
+        
+        <record forcecreate="1" id="seq_mst" model="ir.sequence">
+           <field name="name">nstda.mst</field>
+            <field name="code">nstda.mst</field>
+            <field name="prefix">NSTDA-</field>
+            <field name="padding">3</field>
+        </record>
+
+    </data>
+</openerp>

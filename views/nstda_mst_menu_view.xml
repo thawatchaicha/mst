@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+	<data>
+		<menuitem name="myAsset" id="menu_mst" />
+		<menuitem name="Menu" id="menu_nstda_mst_main" parent="menu_mst" />
+
+		<record model="ir.actions.act_window" id="action_nstda_mst_asset">
+			<field name="name">ครุภัณฑ์</field>
+			<field name="res_model">nstda.mst.asset</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_stamp_res_user_id': uid}</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_nstda_mst_transfer_inbox">
+			<field name="name">Inbox</field>
+			<field name="res_model">nstda.mst.head.transfer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">['|','&amp;',('create_uid','=',uid),('state','=','edit'),'|','&amp;',('state','=','recipient'),('stamp_recipient_id','=',uid),'|','&amp;',('boss','=',uid),('state','=','boss'),'&amp;',('state','=','recipient_boss'),('recip_boss','=',uid)]
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_nstda_mst_transfer_inbox_supplies">
+			<field name="name">Inbox Supplies</field>
+			<field name="res_model">nstda.mst.head.transfer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">['|','&amp;',('state','=','supplies'),('stamp_sup_id','=',uid),'&amp;',('state','=','supplies_boss'),('stamp_boss_sub_id','=',uid)]</field>
+		
+		</record>
+
+		<record model="ir.actions.act_window" id="action_nstda_mst_transfer">
+			<field name="name">ครุภัณฑ์ การดำเนินการ</field>
+			<field name="res_model">nstda.mst.head.transfer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('create_uid','=',uid)]</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_view_nstda_mst_transfer_detail_tree_t">
+			<field name="name">เปลี่ยนผู้ถือครอง</field>
+			<field name="res_model">nstda.mst.transfer.detail</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_nstda_mst_transfer_detail_tree_t" />
+			<field name="domain">[('report_type_docs','=','T'),('state','=','close')]</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_view_nstda_mst_transfer_detail_tree_s">
+			<field name="name">เปลี่ยนสถานะ</field>
+			<field name="res_model">nstda.mst.transfer.detail</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_nstda_mst_transfer_detail_tree_s" />
+			<field name="domain">[('report_type_docs','=','S'),('state','=','close')]</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_view_nstda_mst_transfer_detail_tree_b">
+			<field name="name">การยืม</field>
+			<field name="res_model">nstda.mst.transfer.detail</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_nstda_mst_transfer_detail_tree_b" />
+			<field name="domain">[('report_type_docs','=','B'),('state','=','close')]</field>
+		</record>
+
+
+		<menuitem name="ครุภัณฑ์" id="menu_nstda_mst_asset"
+			action="action_nstda_mst_asset" parent="menu_nstda_mst_main"
+			sequence="1" />
+
+		<menuitem name="Inbox Supplies" id="menu_nstda_mst_transfer_inbox_supplies"
+			action="action_nstda_mst_transfer_inbox_supplies" parent="menu_nstda_mst_main"
+			sequence="2" groups="base.group_nstda_mst_user" />
+
+		<menuitem name="Inbox" id="menu_nstda_mst_transfer_inbox"
+			action="action_nstda_mst_transfer_inbox" parent="menu_nstda_mst_main"
+			sequence="3" groups="base.group_nstda_mst_user" />
+
+		<menuitem name="ครุภัณฑ์ การดำเนินการ" id="menu_nstda_mst_transfer"
+			action="action_nstda_mst_transfer" parent="menu_nstda_mst_main"
+			sequence="4" groups="base.group_nstda_mst_user" />
+			
+		<menuitem name="เปลี่ยนผู้ถือครอง" id="menu_nstda_mst_transfer_sub"
+			action="action_view_nstda_mst_transfer_detail_tree_t" parent="menu_nstda_mst_transfer"
+			sequence="1" groups="base.group_nstda_mst_user" />
+			
+		<menuitem name="เปลี่ยนสถานะ" id="menu_nstda_mst_status_sub"
+			action="action_view_nstda_mst_transfer_detail_tree_s" parent="menu_nstda_mst_transfer"
+			sequence="2" groups="base.group_nstda_mst_user" />
+			
+		<menuitem name="การยืม" id="menu_nstda_mst_borrow_sub"
+			action="action_view_nstda_mst_transfer_detail_tree_b" parent="menu_nstda_mst_transfer"
+			sequence="3" groups="base.group_nstda_mst_user" />
+
+	</data>
+</openerp>

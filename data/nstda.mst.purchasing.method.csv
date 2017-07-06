@@ -1,0 +1,12 @@
+id,create_uid/id,create_date,write_uid/id,write_date,purmenthod_code,description
+__import__.nstda_mst_purchasing_method_1,,,,,1,วิธีตกลงราคา
+__import__.nstda_mst_purchasing_method_2,,,,,2,วิธีสอบราคา
+__import__.nstda_mst_purchasing_method_3,,,,,3,วิธีประกวดราคา
+__import__.nstda_mst_purchasing_method_4,,,,,4,วิธีพิเศษ
+__import__.nstda_mst_purchasing_method_5,,,,,5,วิธีกรณีพิเศษ
+__import__.nstda_mst_purchasing_method_6,,,,,6,วิธีฉุกเฉิน
+__import__.nstda_mst_purchasing_method_7,,,,,7,วิธีe-Auction
+__import__.nstda_mst_purchasing_method_8,,,,,8,รับบริจาค
+__import__.nstda_mst_purchasing_method_9,,,,,9,ของแถม
+__import__.nstda_mst_purchasing_method_10,,,,,10,รับโอน
+__import__.nstda_mst_purchasing_method_11,,,,,99,อื่น ๆ

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="view_nstda_mst_cost_center">
+			<field name="name">nstda.mst.cost.center.tree</field>
+			<field name="model">nstda.mst.cost.center</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="nstda_mst_cost_center_tree">
+						<field name="business_area" />
+						<field name="plan" />
+						<field name="cost_center" />
+						<field name="fund_center" />
+						<field name="description" />
+						<field name="cost_emp_ids" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_nstda_mst_cost_center_form">
+			<field name="name">nstda.mst.cost.center.form</field>
+			<field name="model">nstda.mst.cost.center</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_codt_center_from">
+					<group>
+						<field name="business_area" />
+						<field name="plan" />
+						<field name="cost_center" />
+						<field name="fund_center" />
+						<field name="description" />
+						<field name="cost_emp_ids" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</openerp>
+

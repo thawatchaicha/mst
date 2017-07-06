@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+	<data>
+			
+		<!--Transfer Form View -->
+		<record model="ir.ui.view" id="view_nstda_mst_head_transfer_form">
+			<field name="name">nstda.mst.head.transfer.form</field>
+			<field name="model">nstda.mst.head.transfer</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_transfer" create="false" save="false">
+					<header>			
+						<button name="state_send" string="Save Send" states="draft,edit,send"
+							class="oe_highlight" type="object" 
+							attrs="{'invisible':[('state','in',['boss','recipient','recipient_boss','supplies','supplies_boss','close'])]}" />
+							
+						<button name="state_draft" string="Save Draft"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('doc_no','!=',False)]}" />
+							
+						<button name="state_boss" string="Boss Accept"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('inv_b','!=',True)]}" />
+
+						<button name="state_recipient" string="Recipient Accept"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('inv_r','!=',True)]}" />
+							
+						<button name="state_recipient_boss" string="R. Boss Accept"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('inv_rb','!=',True)]}" />
+
+						<button name="state_supplies" string="Supplies Accept"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('inv_s','!=',True)]}"
+							groups="" />
+							
+						<button name="state_supplies_boss" string="S. Boss Accept"
+							class="oe_highlight" type="object"
+							attrs="{'invisible':[('inv_sb','!=',True)]}"
+							groups="" />
+							
+						<button name="state_edit" string="Refuse" 
+							class="oe_highlight" type="object" 
+							attrs="{'invisible':[('inv_b','==',False),('inv_r','==',False),('inv_rb','==',False),('inv_s','==',False),('inv_sb','==',False)]}" />
+							
+						<field name="state" widget="statusbar" statusbar_visible="draft,close,recipient,recipient_boss,supplies,supplies_boss" 
+							statusbar_colors="{'close':'green'}" />	
+							
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<group colspan="2">
+									<h1>
+										<field name="doc_no" readonly="1" />
+									</h1>
+								</group>
+								<field name="type_docs" string="ชนิดเอกสาร"
+									attrs="{'readonly':[('doc_no','!=',False)]}" />
+								<field name="doc_date" string="วันที่" />
+							</group>
+							
+							<group string="Change to" attrs="{'invisible':[('type_docs','in',['S',False])]}" >
+								<field name="new_emp_ids" colspan="2" 
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','T')], 'required':[('type_docs','=','T')]}" />
+								<field name="new_location_ids" colspan="2" 
+									options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','T')], 'required':[('type_docs','=','T')]}" 
+									domain="[('plant','=',plant_group)]" />
+								<field name="new_room" colspan="2" 
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','T')], 'required':[('type_docs','=','T')]}" />
+								
+								<field name="borrow_emp_ids" colspan="2" string="Borrow Employee" 
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','B')], 'required':[('type_docs','=','B')]}" />
+								<field name="borrow_location_ids" colspan="2" string="Borrow Location" 
+									options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','B')], 'required':[('type_docs','=','B')]}" 
+									domain="[('plant','=',plant_group)]" />
+								<field name="borrow_room" colspan="2" string="Borrow Room" 
+									attrs="{'readonly':[('state','!=','draft')], 'invisible':[('type_docs','!=','B')], 'required':[('type_docs','=','B')]}" />
+									
+								<field name="plant_group" invisible="1" />
+							</group>
+							
+							<label string="รายการ :" />
+							
+							<!-- Transfer -->
+							<field name="detail_ids_T" colspan="6" nolabel="1"
+								attrs="{'readonly':[('state','!=','supplies'),('inv_s','!=',True),'|',('state','!=','boss'),('inv_b','!=',True),'|',('state','!=','draft')], 'invisible':[('type_docs','!=','T')]}"
+								context="{'tree_view_ref' : 'nstda_mst.view_nstda_mst_transfer_detail_tree_transfer'}" >
+							</field>
+							
+							<!-- Status -->
+							<field name="detail_ids_S" colspan="6" nolabel="1"
+								attrs="{'readonly':[('state','!=','supplies'),('inv_s','!=',True),'|',('state','!=','boss'),('inv_b','!=',True),'|',('state','!=','draft')], 'invisible':[('type_docs','!=','S')]}"
+								context="{'tree_view_ref' : 'nstda_mst.view_nstda_mst_transfer_detail_tree_status'}" >
+							</field>
+							
+							<!-- Borrow -->
+							<field name="detail_ids_B" colspan="6" nolabel="1"
+								attrs="{'readonly':[('state','!=','supplies'),('inv_s','!=',True),'|',('state','!=','boss'),('inv_b','!=',True),'|',('state','!=','draft')], 'invisible':[('type_docs','!=','B')]}" 
+								context="{'tree_view_ref' : 'nstda_mst.view_nstda_mst_transfer_detail_tree_borrow'}" >
+							</field>
+							
+							<group>
+								<field name="boss_name" string="ผู้ดำเนินการลำดับถัดไป" readonly="1"
+									attrs="{'invisible':[('type_docs','=','S')]}" />
+							</group>
+							<group>
+								<field name="sup_name" string="จนท.พัสดุในศูนย์ที่สังกัด" readonly="1" 
+									attrs="{'invisible':[('state','=','supplies_boss')]}" />
+								<field name="sup_bossname" string="หัวหน้าเจ้าหน้าที่พัสดุ" readonly="1" 
+									attrs="{'invisible':[('state','in',['draft','edit','send','boss','recipient','recipient_boss','supplies','close'])]}" />
+							</group>
+							
+							<field name="inv_b" invisible="1" />
+							<field name="inv_r" invisible="1" />
+							<field name="inv_rb" invisible="1" />
+							<field name="inv_s" invisible="1" />
+							<field name="inv_sb" invisible="1" />
+							<field name="inv_c" invisible="1" />
+
+						</group>	
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+
+		<!--Transfer Tree View -->
+		<record model="ir.ui.view" id="view_nstda_mst_head_transfer_tree">
+			<field name="name">nstda.mst.head.transfer.tree</field>
+			<field name="model">nstda.mst.head.transfer</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="nstda_mst_head_transfer_tree" create="false"
+					colors="red:state=='edit';blue:state=='boss',blue:state=='recipient_boss';orange:state=='supplies';orange:state=='supplies_boss';green:state=='close'">
+					<field name="type_docs" />
+					<field name="doc_no" />
+					<field name="doc_date" />
+					<field name="create_uid" />
+					<field name="state" string="State" />
+					<field name="current_wait" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View Transfer -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_transfer">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_transfer" editable="bottom" delete="true" >
+					<field name="status" string="Approve" invisible="1" />
+					<field name="asset_ids"
+						attrs="{'readonly':[('state','!=','edit'),('inv_c','!=',True),'|',('state','!=','draft')]}"  
+						options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True, 'create': False}" />
+					<field name="f_old_name" string="Employee" readonly="1" />
+					<field name="f_old_location" string="Location" readonly="1" />
+					<field name="f_old_room" string="Room" readonly="1" />
+					<field name="f_old_status" string="Status" readonly="1" />
+					<field name="f_old_name_b" string="Employee" invisible="1" />
+					<field name="f_old_location_b" string="Location" invisible="1" />
+					<field name="f_old_room_b" string="Room" invisible="1" />
+					<field name="f_old_status_b" string=" Asset Status" invisible="1" />
+					<field name="state" invisible="1" />
+					<field name="notes" string="หมายเหตุ" />
+					<field name="inv_b" invisible="1" />
+					<field name="inv_r" invisible="1" />
+					<field name="inv_rb" invisible="1" />
+					<field name="inv_s" invisible="1" />
+					<field name="inv_sb" invisible="1" />
+					<field name="inv_c" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View Status -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_status">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_status" editable="bottom" delete="true" >
+					<field name="status" string="Approve"
+						invisible="1" />
+					<field name="asset_ids"
+						attrs="{'readonly':[('state','!=','edit'),('inv_c','!=',True),'|',('state','!=','draft')]}"  
+						options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True, 'create': False}" />
+					<field name="f_old_name" string="Employee" readonly="1" />
+					<field name="f_old_location" string="Location" readonly="1" />
+					<field name="f_old_room" string="Room" readonly="1" />
+					<field name="f_old_status" string="Status" readonly="1" />
+					<field name="f_old_purchasing_method" string="Purchasing Method" readonly="1" />
+					<field name="f_old_name_b" string="Employee" invisible="1" />
+					<field name="f_old_location_b" string="Location" invisible="1" />
+					<field name="f_old_room_b" string="Room" invisible="1" />
+					<field name="f_old_status_b" string=" Asset Status" invisible="1" />
+					<field name="state" invisible="1" />
+					<field name="type_docs" invisible="1" />
+					<field name="new_location_ids"
+						options="{'no_quick_create': True, 'no_create_edit': True, 'no_create': True}"
+						domain="[('plant','=',plant_group)]" />
+					<field name="new_room" />
+					<field name="new_asset_status_ids" string="New Asset Status"
+						options="{'limit': 10, 'create': false, 'create_edit': false, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True,'no_show':True, 'no_open': True}"
+						 />
+					<field name="notes" />
+					
+					<field name="plant_group" invisible="1" />
+					<field name="inv_b" invisible="1" />
+					<field name="inv_r" invisible="1" />
+					<field name="inv_rb" invisible="1" />
+					<field name="inv_s" invisible="1" />
+					<field name="inv_sb" invisible="1" />
+					<field name="inv_c" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View Borrow -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_borrow">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_borrow" editable="bottom" delete="true" >
+					<field name="status" string="Approve" invisible="1" />
+					<field name="asset_ids"
+						attrs="{'readonly':[('state','!=','edit'),('inv_c','!=',True),'|',('state','!=','draft')]}"  
+						options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True, 'create': False}" />
+					<field name="f_old_name" string="Employee" readonly="1" />
+					<field name="f_old_location" string="Location" readonly="1" />
+					<field name="f_old_room" string="Room" readonly="1" />
+					<field name="f_old_status" string="Status" readonly="1" />
+					<field name="f_old_name_b" string="Employee" invisible="1" />
+					<field name="f_old_location_b" string="Location" invisible="1" />
+					<field name="f_old_room_b" string="Room" invisible="1" />
+					<field name="f_old_status_b" string=" Asset Status" invisible="1" />
+					<field name="state" invisible="1" />
+					<field name="notes" string="เหตุผลการยืม" />
+					<field name="return_bdate" />
+					
+					<field name="plant_group" invisible="1" />
+					<field name="inv_b" invisible="1" />
+					<field name="inv_r" invisible="1" />
+					<field name="inv_rb" invisible="1" />
+					<field name="inv_s" invisible="1" />
+					<field name="inv_sb" invisible="1" />
+					<field name="inv_c" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View T -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_t">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_t" create="false" delete="true" edit="false" >
+					<field name="report_doc_no" />
+					<field name="report_inventory_no" />
+				    <field name="report_asset_no" />
+				    <field name="report_asset_no_sub_number" />
+				    <field name="report_company_code" />
+				    <field name="report_business_area" />
+				    <field name="report_plant" />
+				  	<field name="report_new_location" />
+				    <field name="report_new_room" />
+				    <field name="report_new_emp" />
+				    <field name="report_old_status" />
+				    <field name="report_purchasing_method" />
+				    <field name="report_type_docs" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View S -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_s">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_s" create="false" delete="true" edit="false" >
+					<field name="report_doc_no" />
+					<field name="report_inventory_no" />
+				    <field name="report_asset_no" />
+				    <field name="report_asset_no_sub_number" />
+				    <field name="report_company_code" />
+				    <field name="report_business_area" />
+				    <field name="report_plant" />
+				    <field name="report_old_location" />
+				    <field name="report_old_room" />
+				    <field name="report_personal" />
+				    <field name="report_new_asset_status" />
+				    <field name="report_purchasing_method" />
+				    <field name="report_type_docs" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Detail Transfer Tree View B -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_tree_b">
+			<field name="name">nstda.mst.transfer.detail.tree</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="view_nstda_mst_transfer_detail_tree_b" create="false" delete="true" edit="false" >
+					<field name="report_doc_no" />
+					<field name="report_inventory_no" />
+				    <field name="report_asset_no" />
+				    <field name="report_asset_no_sub_number" />
+				    <field name="report_company_code" />
+				    <field name="report_business_area" />
+				    <field name="report_plant" />
+				  	<field name="report_new_location" />
+				    <field name="report_new_room" />
+				    <field name="report_new_emp" />
+				    <field name="report_old_status" />
+				    <field name="report_purchasing_method" />
+				    <field name="report_type_docs" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+
+		<!--Detail Transfer Form View -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_form">
+			<field name="name">nstda.mst.transfer.form</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_transfer_detail">
+					<group>
+						<group>
+							<field name="asset_ids" 
+								options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True}" />
+							<field name="new_asset_status_ids" 
+								options="{'limit': 10, 'create': false, 'create_edit': false, 'no_quick_create': True, 'no_create_edit': True, 'no_create': True,'no_show':True, 'no_open': True}" widget="selection" />
+							<field name="f_old_name" />
+							<field name="f_old_location" />
+							<field name="f_old_room" />
+							<field name="f_old_name_b" invisible="1" />
+							<field name="f_old_location_b" invisible="1" />
+							<field name="f_old_room_b" invisible="1" />
+						</group>
+						<newline />
+					</group>
+				</form>
+			</field>
+		</record>
+		
+		
+		<act_window id="action_nstda_mst_transfer_slide" multi="True"
+			key2="client_action_multi" name="เปลี่ยนผู้ถือครอง/เปลี่ยนสถานะ/การยืม" res_model="nstda.mst.head.transfer"
+			src_model="nstda.mst.asset" view_mode="form" target="new" view_type="form"
+			context="{'state':'Draft', 'res_model': 'nstda.mst'}" view_id="view_nstda_mst_head_transfer_form" />
+	</data>
+</openerp>

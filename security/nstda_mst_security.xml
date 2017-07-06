@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<openerp>
+	<data noupdate="1">
+		
+		
+		<record model="res.groups" id="base.group_nstda_mst_user">
+			<field name="name">User</field>
+			<field name="category_id" ref="module_category_mst" />
+		</record>
+
+
+		<record model="res.groups" id="nstdaperm.group_nstda_user">
+			<field name="implied_ids" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+		</record>
+
+
+		<record model="res.groups" id="base.group_nstda_mst_supplies">
+			<field name="name">Supplies</field>
+			<field name="category_id" ref="module_category_mst" />
+			<field name="implied_ids" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field name="users"
+				eval="[
+	  				(4, ref('nstdaperm.group_nstda_emp003441')),
+	  				(4, ref('nstdaperm.group_nstda_emp002477')),
+	  				(4, ref('nstdaperm.group_nstda_emp001331')),
+	  				(4, ref('nstdaperm.group_nstda_emp000669')),
+	  				(4, ref('nstdaperm.group_nstda_emp001457')),
+	  				(4, ref('nstdaperm.group_nstda_emp004372')),
+	  				(4, ref('nstdaperm.group_nstda_emp002840')),
+	  				(4, ref('nstdaperm.group_nstda_emp001003')),
+	  				(4, ref('nstdaperm.group_nstda_emp000178')),
+	  				(4, ref('nstdaperm.group_nstda_emp000143')),		
+	  				(4, ref('nstdaperm.group_nstda_emp000040')),	
+	  				(4, ref('nstdaperm.group_nstda_emp003696')),
+	  				]" />
+		</record>
+		
+		
+		<record model="res.groups" id="base.group_nstda_mst_admin">
+			<field name="name">Admin</field>
+			<field name="category_id" ref="module_category_mst" />
+			<field name="implied_ids" 
+				eval="[
+					(4, ref('base.group_nstda_mst_user')),
+					(4, ref('base.group_nstda_mst_supplies')),
+					]" />
+			<field name="users"
+				eval="[
+	  				(4, ref('nstdaperm.group_nstda_emp002390')),
+	  				]" />
+		</record>
+
+
+		<record id="mst_asset_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_asset" />
+			<field name="domain_force">['|','|',('stamp_org_id','in',[g.id for g in user.groups_id]),('stamp_org_id','=',False),('stamp_org_id','=','')]
+				</field>
+<!-- 			<field name="domain_force">['|','|',('stamp_user_division_id','in',[g.id  -->
+<!-- 			for g in user.groups_id]),('stamp_user_division_id','=',False),('stamp_user_division_id','=','')] -->
+<!-- 				</field> -->
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field eval="1" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="1" name="perm_create" />
+		</record>
+
+
+		<record id="mst_asset_sup_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_asset" />
+			<field name="domain_force">[]</field>
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_supplies'))]" />
+			<field eval="1" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="1" name="perm_create" />
+		</record>
+
+
+		<record id="mst_asset_del_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_head_transfer" />
+			<field name="domain_force">['&amp;',('create_uid','=',user.id),('state','not in',['draft','edit','send'])]
+				</field>
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field eval="0" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="1" name="perm_create" />
+		</record>
+
+
+		<record id="mst_asset_del2_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_head_transfer" />
+			<field name="domain_force">['&amp;',('create_uid','=',user.id),('state','in',['draft','edit','send'])]
+				</field>
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field eval="1" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="1" name="perm_create" />
+		</record>
+
+
+		<record id="mst_asset_del3_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_head_transfer" />
+			<field name="domain_force">['|','&amp;',('state','=','boss'),('boss','=',user.id),'|','&amp;',('state','=','recipient'),('stamp_recipient_id','=',user.id),'&amp;',('state','=','supplies'),('stamp_sup_group_id','in',[g.id for g in user.groups_id])]
+				</field>
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field eval="0" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="0" name="perm_create" />
+		</record>
+
+
+		<record id="mst_asset_del4_filter_rule" model="ir.rule">
+			<field name="name">Asset Filter Rules</field>
+			<field name="model_id" ref="model_nstda_mst_head_transfer" />
+			<field name="domain_force">[]</field>
+			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" />
+			<field eval="0" name="perm_unlink" />
+			<field eval="1" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="1" name="perm_create" />
+		</record>
+
+
+		<!-- ######################################### supplies head_transfer ################################################# -->
+
+		 <record id="mst_supplies_filter_rule" model="ir.rule">
+			 <field name="name">Asset Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['|',('state','=','supplies'),'|',('state','=','edit'),('state','=','close')]
+			 	</field>
+			 <field name="groups"
+				 eval="[
+				 		(4, ref('base.group_nstda_mst_supplies')),
+				 		(4, ref('nstdaperm.group_nstda_dep1082')),
+				 		(4, ref('nstdaperm.group_nstda_dep2065')),
+				 		(4, ref('nstdaperm.group_nstda_dep3064')),
+				 		(4, ref('nstdaperm.group_nstda_dep4070')),
+				 		(4, ref('nstdaperm.group_nstda_dep5031')),
+				 		(4, ref('nstdaperm.group_nstda_dep6044')),
+				 		]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+
+
+		<!-- ##########################################user head_transfer ################################################ -->
+		
+		 <record id="mst_head_transfer_de_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['&amp;',('state','=','edit'),'|',('create_uid','!=',user.id),'|',('boss','=',user.id),'|',('stamp_recipient_id','=',user.id),('stamp_sup_group_id','in',[g.id for g in user.groups_id])]
+			 	</field>
+	<!-- 		('stamp_sup_group_id','in',[g.id for g in user.groups_id]) -->
+	<!-- 		['&amp;','|',('state','=','draft'),('state','=','edit'),('create_uid','=',user.id)] -->
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="0" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+
+
+		 <record id="mst_head_transfer_bs_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['&amp;','|',('state','=','boss'),('state','=','supplies'),('create_uid','=',user.id)]
+			 	</field>
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="1" name="perm_create" />
+		 </record>
+
+
+		 <record id="mst_head_transfer_1_user_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['|','&amp;',('state','=','boss'),('boss','=',user.id),'|','&amp;',('state','=','recipient'),('stamp_recipient_id','=',user.id),'&amp;',('state','=','supplies'),('stamp_sup_group_id','in',[g.id for g in user.groups_id])]
+				 </field>
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+
+
+		 <record id="mst_head_transfer_2_user_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['&amp;','|',('state','=','recipient'),('state','=','close'),('create_uid','=',user.id)]
+			 	</field>
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="0" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+
+
+		 <record id="mst_head_transfer_r_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['|',('state','=','edit'),'&amp;',('create_uid','!=',user.id),'&amp;',('stamp_recipient_id','!=',user.id),('stamp_sup_group_id','not in',[g.id for g in user.groups_id])]
+			 	</field>
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+
+
+		 <record id="mst_head_transfer_create_user_filter_rule" model="ir.rule">
+			 <field name="name">Asset State Filter Rules</field>
+			 <field name="model_id" ref="model_nstda_mst_head_transfer" />
+			 <field name="domain_force">['|','&amp;',('state','=','boss'),('boss','!=',user.id),'|','&amp;',('state','=','supplies'),('stamp_sup_group_id','not in',[g.id for g in user.groups_id]),'&amp;',('state','=','recipient'),('stamp_recipient_id','!=',user.id)]
+			 	</field>
+			 <field name="groups" eval="[(4, ref('nstdaperm.group_nstda_user'))]" />
+			 <field eval="0" name="perm_unlink" />
+			 <field eval="1" name="perm_write" />
+			 <field eval="1" name="perm_read" />
+			 <field eval="0" name="perm_create" />
+		 </record>
+		 
+		 
+		<!-- Rule User -->
+<!-- 		<record id="rule_nstda_mst_by_groups" model="ir.rule"> -->
+<!-- 			<field name="name">Asset By Group</field> -->
+<!-- 			<field name="model_id" ref="model_nstda_mst" /> -->
+<!-- 			<field name="groups" eval="[(4, ref('base.group_nstda_mst_user'))]" /> -->
+<!-- 			<field name="perm_read" eval="True" /> -->
+<!-- 			<field name="perm_write" eval="True" /> -->
+<!-- 			<field name="perm_create" eval="False" /> -->
+<!-- 			<field name="perm_unlink" eval="False" /> -->
+<!-- 			<field name="domain_force">[('org_groups_id','in',[g.id for g in user.groups_id])]</field> -->
+<!-- 		</record> -->
+
+
+	</data>
+</openerp>

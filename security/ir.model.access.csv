@@ -1,0 +1,21 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_nstda_mst_head_transfer_user,head transfer user,model_nstda_mst_head_transfer,,1,1,1,1
+access_nstda_mst_head_transfer_supplies,head transfer supplies,model_nstda_mst_head_transfer,,1,1,1,1
+
+access_nstda_mst_transfer_detail_user,transfer detail user,model_nstda_mst_transfer_detail,,1,1,1,1
+access_nstda_mst_transfer_detail_supplies,transfer detail supplies,model_nstda_mst_transfer_detail,,1,1,1,1
+
+access_nstda_mst_asset_user,asset user,model_nstda_mst_asset,,1,1,1,1
+access_nstda_mst_asset_supplies,asset supplies,model_nstda_mst_asset,,1,1,1,1
+
+access_nstda_mst_location_user,location user,model_nstda_mst_location,,1,1,1,1
+access_nstda_mst_location_supplies,location supplies,model_nstda_mst_location,,1,1,1,1
+
+access_nstda_mst_asset_status_user,status user,model_nstda_mst_asset_status,,1,1,1,1
+access_nstda_mst_asset_status_supplies,status supplies,model_nstda_mst_asset_status,,1,1,1,1
+
+access_nstda_mst_purchasing_method_user,purchasing method user,model_nstda_mst_purchasing_method,,1,1,1,1
+access_nstda_mst_purchasing_method_supplies,purchasing method supplies,model_nstda_mst_purchasing_method,,1,1,1,1
+
+access_nstda_mst_asset_class_user,asset_class user,model_nstda_mst_asset_class,,1,1,1,1
+access_nstda_mst_asset_class_supplies,asset_class supplies,model_nstda_mst_asset_class,,1,1,1,1

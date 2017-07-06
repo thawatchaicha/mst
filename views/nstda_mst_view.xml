@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+	<data>
+
+
+		<!-- Search View -->
+		<record model="ir.ui.view" id="view_nstda_mst_search">
+			<field name="name">nstda.mst.asset.search</field>
+			<field name="model">nstda.mst.asset</field>
+			<field name="arch" type="xml">
+				<search string="asset">
+					<field name="description_1" string="Description" />
+					<field name="inventory_no" string="NSTDA Number" />
+
+					<field name="division_for_search" string="ฝ่าย" />
+					<field name="department_for_search" string="งาน" />
+					<field name="asset_status_ids" string="สถานะครุภัณฑ์" 
+						options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True}" widget="selection" />
+
+					<group expand="0" string="Group By...">
+						<!-- <filter name="personel_ids" icon="terp-accessories-archiver" -->
+						<!-- string="เจ้าของ" context="{'group_by':'personel_ids'}" /> -->
+						<filter name="group_department_ids" icon="terp-accessories-archiver"
+							string="งาน" context="{'group_by':'group_department_ids'}" />
+						<filter name="group_division_ids" icon="terp-accessories-archiver"
+							string="ฝ่าย" context="{'group_by':'group_division_ids'}" />
+
+						<filter name="asset_status_ids" icon="terp-accessories-archiver"
+							string="สถานะครุภัณฑ์" context="{'group_by':'asset_status_ids'}" 
+							options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True}" widget="selection" />
+					</group>
+
+					<group expand="0" string="Filter By...">
+						<filter name="stamp_res_user_id" string="ของตนเอง"
+							domain="[('personel_ids.emp_rusers_id.id','=',uid)]" />
+
+						<filter name="group_department_ids" string="งานของตนเอง"
+							domain="[('group_department_ids.users','child_of',[uid])]" />
+						<filter name="group_division_ids" string="ฝ่ายของตนเอง"
+							domain="[('group_division_ids.users','child_of',[uid])]" />
+
+						<!-- <filter name="asset_status_ids" string="สถานะครุภัณฑ์ใช้งานปกติ" -->
+						<!-- domain="[('asset_status_ids.description','=','ใช้งานปกติ')]" /> -->
+					</group>
+
+					<group expand="0" string="Search By...">
+						<field name="personel_ids" string="เจ้าของ" />
+					</group>
+					<newline />
+				</search>
+			</field>
+		</record>
+		
+		
+		<!-- Search View -->
+		<record model="ir.ui.view" id="nstda_mst_location_search_view">
+			<field name="name">nstda.mst.location.search</field>
+			<field name="model">nstda.mst.location</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field string="ทั้งหมด" name="location_code"
+						filter_domain="['|',
+		               ('description','ilike',self),
+		                ('location_code','ilike',self),
+						]" />
+				</search>
+			</field>
+		</record>
+		
+
+		<!--Asset Form View -->
+		<record model="ir.ui.view" id="view_nstda_mst_asset_form">
+			<field name="name">nstda.mst.asset.form</field>
+			<field name="model">nstda.mst.asset</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_asset" create="false" delete="false" edit="true" >
+					<group>
+						<sheet>
+							<group col="6">
+								<group colspan="6">
+									<field name="inventory_no" string="NSTDA Number" readonly="1" />
+									<field name="asset_no" string="Number Reference" readonly="1" />
+									<field name="asset_no_sub_number" string="Number Reference" readonly="1" />
+									<field name="description_1" string="Description" readonly="1" />
+									<field name="asset_class" string="Asset Class" readonly="1" />
+									<field name="serial_no" string="Serial Number" readonly="1" />
+								</group>
+
+								<group colspan="3">
+									<field name="capitalized_on" string="Capitalized on" readonly="1" />
+								</group>
+								<group colspan="3">
+									<field name="deactuvation_on" string="Deactuvation on" readonly="1" />
+								</group>
+
+
+								<group colspan="6">
+									<field name="fiscal_year" string="Fiscal Year" readonly="1" />
+									<field name="asset_status_ids" string="Status"
+										options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True}" widget="selection" readonly="1" />
+									<field name="purchasing_method_ids" string="Purchasing Method" readonly="1" />
+								</group>
+								
+								<group colspan="6">
+									<field name="stamp_org_id" readonly="1" />
+									<field name="cost_center_ids" readonly="1" />
+									<field name="wbs_ids" readonly="1" />
+								</group>
+
+								<group colspan="6">
+									<field name="internal_order_ids" readonly="1" />
+									<field name="location_ids" options="{'create': false ,'create_edit': false}" readonly="1" />
+									<field name="room" readonly="1" />
+									<field name="personel_ids" options="{'create': false ,'create_edit': false}" readonly="1" />
+
+									<label string="เอกสารจัดเก็บ **" for='mst_asset_file_ids'
+										colspan="6" />
+									<field name="mst_asset_file_ids" colspan="6">
+										<form string="Create: Files" version="7.0">
+											<group>
+												<group>
+													<field name="name" string="ชื่อเอกสาร" required='1'
+														invisible="0" />
+													<field name="res_model" string="Model" invisible="1" />
+													<field name="datas_fname" invisible="1" string="ชื่อเอกสาร" />
+													<field name="datas" filename="name,datas_fname" string="เลือกเอกสาร(ไฟล์แนบ)"
+														required='1'
+														context="{'res_model': 'asset', 'filter': 'pdf,doc,docx,odt,jpg,png,gif,zip,rar', 'size_limit': '5'}" />
+												</group>
+											</group>
+											<span>
+												* รองรับไฟล์นามสกุล
+												<span class="oe_inline">pdf,doc,docx,odt,jpg,png,gif,zip,rar
+												</span>
+												ขนาดไม่เกิน
+												<span class="oe_inline">5</span>
+												Mb
+											</span>
+										</form>
+										<tree>
+											<field name="name" string="ชื่อเอกสาร" required='1' />
+											<field name="datas_fname" invisible="1" />
+											<field name="datas" filename="datas_fname" string="ชื่อเอกสาร(ไฟล์แนบ)"
+												required='1' />
+										</tree>
+									</field>
+									
+								</group>
+							</group>
+							<newline />
+						</sheet>
+					</group>
+				</form>
+			</field>
+		</record>
+
+
+		<!--Asset Tree View -->
+		<record model="ir.ui.view" id="view_nstda_mst_asset_tree">
+			<field name="name">nstda.mst.asset.tree</field>
+			<field name="model">nstda.mst.asset</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+
+				<tree string="nstda_mst_asset_tree" create="false" delete="false" edit="false" >
+					<field name="fiscal_year" string="Fiscal Year" />
+					<field name="inventory_no" string="Inventory Number" />
+					<field name="description_1" string="Description" />
+<!-- 					<field name="group_division_ids" invisible="0" string="ฝ่าย" /> -->
+					<field name="group_department_ids" invisible="0" string="งาน" />
+					<field name="wbs_ids" />
+					<field name="internal_order_ids" />
+					<field name="location_ids" />
+					<field name="room" />
+					<field name="asset_status_ids" string="status" 
+						options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create': True}" widget="selection" />
+					<field name="personel_ids" invisible="1" />
+					<field name="stamp_org_id" invisible="1" />
+					<field name="division_for_search" invisible="1" />
+					<field name="department_for_search" invisible="1" />
+					<field name="user_life" invisible="1" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!--Asset Location Form View -->
+		<record model="ir.ui.view" id="view_nstda_mst_location_form">
+			<field name="name">nstda.mst.location.form</field>
+			<field name="model">nstda.mst.location</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_location" >
+					<group>
+						<field name="location_code" />
+						<field name="description" />
+<!-- 						options="{'create': false, 'create_edit': false, 'm2o_dialog': false,'no_open': true}"  -->
+					</group>	
+				</form>
+			</field>
+		</record>
+		
+		
+		<!--Asset Location Tree View -->
+		<record model="ir.ui.view" id="view_nstda_mst_location_tree">
+			<field name="name">nstda.mst.location.tree</field>
+			<field name="model">nstda.mst.location</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="nstda_mst_location" create="false" delete="false" edit="false">
+						<field name="location_code" />
+						<field name="description" />
+				</tree>
+			</field>			
+		</record>
+		
+		
+		<!--Asset Purchasing Method Form View -->
+		<record model="ir.ui.view" id="view_nstda_mst_purchasing_method_form">
+			<field name="name">nstda.mst.purchasing.method.form</field>
+			<field name="model">nstda.mst.purchasing.method</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_purchasing_method" create="false" delete="false" edit="false" >
+					<group>
+						<field name="purmenthod_code" />
+						<field name="description" />
+<!-- 						options="{'create': false, 'create_edit': false, 'm2o_dialog': false,'no_open': true}"  -->
+					</group>	
+				</form>
+			</field>
+		</record>
+		
+		
+		<!--Asset Status View -->
+		<record model="ir.ui.view" id="view_nstda_mst_asset_status_form">
+			<field name="name">nstda.mst.asset.status.form</field>
+			<field name="model">nstda.mst.asset.status</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="nstda_mst_asset_status" create="false" delete="false" edit="false" >
+					<group>
+						<field name="status_code" />
+						<field name="description" />
+<!-- 						options="{'create': false, 'create_edit': false, 'm2o_dialog': false,'no_open': true}"  -->
+					</group>	
+				</form>
+			</field>
+		</record>
+		
+		
+		<!--Asset Status Tree -->
+		<record model="ir.ui.view" id="view_nstda_mst_asset_status_tree">
+			<field name="name">nstda.mst.asset.status.tree</field>
+			<field name="model">nstda.mst.asset.status</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+
+				<tree string="nstda_mst_asset_status_tree" create="false" delete="false" edit="false" >
+					<field name="status_code" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		
+		
+		<!-- Search View -->
+		<record model="ir.ui.view" id="view_nstda_mst_transfer_detail_search">
+			<field name="name">nstda.mst.transfer.detail.search</field>
+			<field name="model">nstda.mst.transfer.detail</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+				
+					<field name="report_doc_no" string="Number" filter_domain="[('report_doc_no','ilike',self)]" />
+					<field name="report_inventory_no" string="Inventory Number" filter_domain="[('report_doc_no','ilike',self)]" />
+					<field name="asset_ids" string="Main Asset Number" filter_domain="[('asset_ids','ilike',self)]" />
+
+					<group expand="0" string="Group By">
+                        <filter string="Business Area" icon="terp-accessories-archiver" context="{'group_by':'report_business_area'}" />
+                        <filter string="Purchasing Method" icon="terp-accessories-archiver" context="{'group_by':'f_old_purchasing_method'}" />
+                        <filter string="New Location" icon="terp-accessories-archiver" context="{'group_by':'report_new_location'}" />
+                        <filter string="New Room" icon="terp-accessories-archiver" context="{'group_by':'report_new_room'}" />
+					    <filter string="New Personal" icon="terp-accessories-archiver" context="{'group_by':'report_new_emp'}" />
+					    <filter string="New Status" icon="terp-accessories-archiver" context="{'group_by':'report_new_asset_status'}" />	
+					    <filter string="Old Location" icon="terp-accessories-archiver" context="{'group_by':'f_old_location'}" />
+					    <filter string="Old Room" icon="terp-accessories-archiver" context="{'group_by':'f_old_room'}" />
+					    <filter string="Old Personal" icon="terp-accessories-archiver" context="{'group_by':'report_personal'}" />
+					    <filter string="Old Status" icon="terp-accessories-archiver" context="{'group_by':'f_old_status'}" />
+					</group>
+
+				</search>
+			</field>
+		</record>
+		
+		
+	</data>
+</openerp>
+
