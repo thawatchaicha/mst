@@ -44,7 +44,7 @@
 							class="oe_highlight" type="object" 
 							attrs="{'invisible':[('inv_b','==',False),('inv_r','==',False),('inv_rb','==',False),('inv_s','==',False),('inv_sb','==',False)]}" />
 							
-						<field name="state" widget="statusbar" statusbar_visible="draft,close,recipient,recipient_boss,supplies,supplies_boss" 
+						<field name="state" widget="statusbar" statusbar_visible="draft,boss,recipient,recipient_boss,supplies,supplies_boss,close" 
 							statusbar_colors="{'close':'green'}" />	
 							
 					</header>
